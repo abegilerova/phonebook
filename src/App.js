@@ -11,8 +11,8 @@ const App = (props) => {
   const [showAll, setShowAll] = useState(true)
 
   const handlePersonChange = (event) => {
-    console.log(event);
-    console.log(event.target.value);
+    //console.log(event);
+    // console.log(event.target.value);
     setNewName(event.target.value);
   }
 
@@ -24,12 +24,23 @@ const App = (props) => {
       name: newName
     };
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    const existingPersons = Object.assign(persons);
+
+    if (existingPersons.filter(el => el.name === newName).length) {
+      // console.log("existing persons", existingPersons);
+      alert(`${newName} has already been added`)
+    } else {
+      setPersons(persons.concat(personObject))
+
+    }
+    setNewName('');
   }
 
 
-  //const personsToShow=showAll? persons: persons.filter(note.import)
+  const displayNames = () => persons.map(el => <li>{el.name}</li>);
+
+
+
 
   return (
     <div>
@@ -45,6 +56,9 @@ const App = (props) => {
         </div>
       </form>
       <h2>Numbers</h2>
+      <ul>
+        {displayNames()}
+      </ul>
     </div>
   )
 }
