@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import Filter from './components/Filter';
-
+import axios from 'axios'
 
 const App = (props) => {
+
+
+
   const [persons, setPersons] = useState([{
     name: 'Arto Hellas',
     number: '0700249207',
@@ -12,6 +15,17 @@ const App = (props) => {
 
   }
   ])
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons');
 
   const [foundPeople, setFoundPeople] = useState([]);
   const [newSearch, setNewSearch] = useState('');
