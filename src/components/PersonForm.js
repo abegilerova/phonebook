@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import personService from '../services/persons';
 
 
 const PersonsForm = ({ persons, setPersons }) => {
@@ -23,13 +24,19 @@ const PersonsForm = ({ persons, setPersons }) => {
             id: persons.length + 1,
         };
 
+
         const existingPersons = Object.assign(persons);
 
         if (existingPersons.filter(el => el.name === newName).length) {
             // console.log("existing persons", existingPersons);
             alert(`${newName} has already been added or you did't entry any input`)
         } else {
-            setPersons(persons.concat(personObject))
+            personService
+                .create(personObject)
+                .then(response => {
+                    setPersons(persons.concat(personObject))
+                })
+
 
         }
         setNewName('');
