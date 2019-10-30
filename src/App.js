@@ -21,7 +21,7 @@ const App = (props) => {
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
-        console.log('promise fulfilled')
+        console.log('promise fulfilled', response.data)
         setPersons(response.data)
       })
   }, [])
@@ -39,7 +39,7 @@ const App = (props) => {
       <h3>add a new </h3>
       <PersonForm persons={persons} setPersons={setPersons} />
       <h3>Numbers</h3>
-      <Persons newSearch={newSearch} foundPeople={foundPeople} persons={persons} />
+      <Persons newSearch={newSearch} foundPeople={foundPeople} persons={persons} setPersons={setPersons} />
     </div>
   )
 }
