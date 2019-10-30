@@ -16,32 +16,38 @@ const PersonsForm = ({ persons, setPersons }) => {
 
     const addPerson = (event) => {
         event.preventDefault();
+        const personsFiltered = persons.filter(person => person.name === newName);
         // console.log('form submitted', event.target);
         // console.log(typeof newPerson);
         const personObject = {
             name: newName,
             number: newNumber,
             id: persons.length + 1,
-        };
+        }
 
-
-        const existingPersons = Object.assign(persons);
-
-        if (existingPersons.filter(el => el.name === newName).length) {
-            // console.log("existing persons", existingPersons);
-            alert(`${newName} has already been added or you did't entry any input`)
+        if (personsFiltered.length > 0) {
+            if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
+                const idToBeUpdated = personsFiltered[0].id;
+                personService
+                    .update(idToBeUpdated, personObject)
+                    .then(updatedPerson => {
+                        setPersons(persons.map(person => person.id !== idToBeUpdated ? person : updatedPerson))
+                        setNewName('')
+                        setNewNumber('')
+                    })
+            }
         } else {
             personService
                 .create(personObject)
-                .then(response => {
-                    setPersons(persons.concat(personObject))
+                .then(returnedPerson => {
+                    setPersons(persons.concat(returnedPerson))
+                    setNewName('')
+                    setNewNumber('')
                 })
-
-
         }
-        setNewName('');
-        setNewNumber('');
+
     }
+
 
     return (
         <form onSubmit={addPerson} >
@@ -57,5 +63,6 @@ const PersonsForm = ({ persons, setPersons }) => {
         </form>
     )
 }
+
 
 export default PersonsForm
